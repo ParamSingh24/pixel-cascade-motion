@@ -1,15 +1,26 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const clients = [
-  ["ramp", "OpenAI", "scale"],
-  ["BOOM", "Cash App", "Vercel"],
-  ["perplexity", "SUPERCELL", "monzo"],
-  ["Raycast", "Retool", "MERCURY"]
+const clientSets = [
+  ["Apple", "Google", "Microsoft"],
+  ["Netflix", "Spotify", "Adobe"],
+  ["Tesla", "Amazon", "Meta"],
+  ["Uber", "Airbnb", "Stripe"]
 ];
 
 const ClientShowcase = () => {
   const [showCustomers, setShowCustomers] = useState(false);
+  const [currentSet, setCurrentSet] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSet((prev) => (prev + 1) % clientSets.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentClients = clientSets[currentSet];
 
   return (
     <section className="py-20 bg-black dark:bg-white text-white dark:text-black transition-colors duration-300">
@@ -21,11 +32,11 @@ const ClientShowcase = () => {
         >
           {/* Client Grid */}
           <div className={`grid grid-cols-3 gap-8 transition-all duration-500 ${showCustomers ? 'blur-sm opacity-30' : ''}`}>
-            {clients.map((row, rowIndex) => (
+            {[0, 1, 2, 3].map((rowIndex) => (
               <div key={rowIndex} className="col-span-3 grid grid-cols-3 gap-8">
-                {row.map((client, clientIndex) => (
+                {currentClients.map((client, clientIndex) => (
                   <div 
-                    key={clientIndex}
+                    key={`${rowIndex}-${clientIndex}`}
                     className="h-24 flex items-center justify-center text-2xl font-semibold hover:text-red-500 transition-colors duration-300"
                   >
                     {client}

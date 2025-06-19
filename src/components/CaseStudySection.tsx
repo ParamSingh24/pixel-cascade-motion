@@ -4,33 +4,38 @@ import { useState, useEffect } from "react";
 const caseStudies = [
   {
     id: 1,
-    title: "INFORMAL MEETING OF NATO MINISTERS OF FOREIGN AFFAIRS IN OSLO, NORWAY",
+    title: "INNOVATIVE TECH SOLUTIONS FOR MODERN ENTERPRISES",
     number: "03",
-    tags: ["NORWAY", "B2B EVENT"],
+    tags: ["TECHNOLOGY", "ENTERPRISE"],
     image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80"
   },
   {
     id: 2,
-    title: "GRAND HOTEL OSLO 150",
+    title: "SUSTAINABLE ENERGY INFRASTRUCTURE PROJECT",
     number: "02",
-    tags: ["INTERNATIONAL", "NORWAY", "BRAND ACTIVATION"],
+    tags: ["ENERGY", "SUSTAINABILITY", "INFRASTRUCTURE"],
     image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80"
   },
   {
     id: 3,
-    title: "SWITCH - SOPRA STERIA KICK OFF 2025",
+    title: "DIGITAL TRANSFORMATION INITIATIVE 2025",
     number: "01",
-    tags: ["NORWAY", "B2E EVENT"],
+    tags: ["DIGITAL", "TRANSFORMATION"],
     image: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80"
   }
 ];
 
 const CaseStudySection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % caseStudies.length);
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % caseStudies.length);
+        setIsTransitioning(false);
+      }, 500);
     }, 4000);
 
     return () => clearInterval(interval);
@@ -40,6 +45,11 @@ const CaseStudySection = () => {
 
   return (
     <section className="min-h-screen bg-white dark:bg-black relative overflow-hidden">
+      {/* Red overlay for transition effect */}
+      <div className={`absolute inset-0 bg-red-500 z-20 transition-opacity duration-500 ${
+        isTransitioning ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}></div>
+
       {/* Background with geometric shapes */}
       <div className="absolute inset-0">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-red-500 to-transparent opacity-10"></div>

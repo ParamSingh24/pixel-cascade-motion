@@ -1,26 +1,53 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const products = [
   {
     id: 1,
     title: "Premium Collection",
     image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80",
+    hoverImage: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80",
     label: "NEW"
   },
   {
     id: 2,
     title: "Essential Series",
     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80",
+    hoverImage: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80",
     label: "NEW"
   }
 ];
 
 const ProjectsCarousel = () => {
   const [activeProduct, setActiveProduct] = useState(0);
+  const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
+  const [showLoader, setShowLoader] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSeeProjects = () => {
+    setShowLoader(true);
+    setTimeout(() => {
+      navigate('/projects');
+    }, 2000);
+  };
 
   return (
-    <section className="py-20 bg-gray-50 dark:bg-gray-900">
+    <section className="py-20 bg-gray-50 dark:bg-gray-900 relative">
+      {/* Custom Loader */}
+      {showLoader && (
+        <div className="fixed inset-0 z-50 bg-white dark:bg-black flex items-center justify-center">
+          <div className="relative">
+            {/* First shape - vertical rectangle */}
+            <div className="w-8 h-24 bg-red-500 animate-pulse mb-4 transition-all duration-1000 transform-gpu">
+            </div>
+            {/* Second shape - horizontal rectangle */}
+            <div className="w-24 h-8 bg-red-500 animate-pulse transition-all duration-1000 delay-500 transform-gpu scale-0 animate-[scale-in_0.5s_ease-out_0.5s_forwards]">
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="container mx-auto px-6">
         <h2 className="text-4xl md:text-6xl font-bold text-center mb-16">
           Our Projects
@@ -32,14 +59,23 @@ const ProjectsCarousel = () => {
               <div
                 key={product.id}
                 className="relative group cursor-pointer"
-                onMouseEnter={() => setActiveProduct(index)}
+                onMouseEnter={() => {
+                  setActiveProduct(index);
+                  setHoveredProduct(index);
+                }}
+                onMouseLeave={() => setHoveredProduct(null)}
+                onTouchStart={() => {
+                  setActiveProduct(index);
+                  setHoveredProduct(index);
+                }}
+                onTouchEnd={() => setHoveredProduct(null)}
               >
                 <div className="relative overflow-hidden rounded-lg aspect-[4/3]">
                   <div className="absolute top-4 left-4 bg-gray-200 dark:bg-gray-800 px-3 py-1 rounded-full text-sm font-medium z-10">
                     {product.label}
                   </div>
                   <img
-                    src={product.image}
+                    src={hoveredProduct === index ? product.hoverImage : product.image}
                     alt={product.title}
                     className={`w-full h-full object-cover transition-all duration-700 ${
                       activeProduct === index ? 'scale-110' : 'scale-100'
@@ -65,6 +101,16 @@ const ProjectsCarousel = () => {
                 }`}
               ></button>
             ))}
+          </div>
+
+          {/* See Our Projects Button */}
+          <div className="flex justify-center mt-12">
+            <button 
+              onClick={handleSeeProjects}
+              className="bg-red-500 text-white px-8 py-4 font-semibold hover:bg-red-600 transition-all duration-300 transform hover:scale-105 rounded-lg"
+            >
+              See Our Projects →
+            </button>
           </div>
         </div>
       </div>
