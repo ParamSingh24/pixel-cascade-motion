@@ -35,8 +35,8 @@ const CaseStudySection = () => {
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % caseStudies.length);
         setIsTransitioning(false);
-      }, 500);
-    }, 4000);
+      }, 200); // Faster transition
+    }, 2500); // More frequent changes
 
     return () => clearInterval(interval);
   }, []);
@@ -45,9 +45,11 @@ const CaseStudySection = () => {
 
   return (
     <section className="min-h-screen bg-white dark:bg-black relative overflow-hidden">
-      {/* Red overlay for transition effect */}
-      <div className={`absolute inset-0 bg-red-500 z-20 transition-opacity duration-500 ${
-        isTransitioning ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      {/* Fast corner-to-corner red overlay */}
+      <div className={`absolute inset-0 z-20 transition-all duration-200 ease-in-out ${
+        isTransitioning 
+          ? 'bg-red-500 transform scale-150 rotate-12' 
+          : 'bg-red-500 scale-0 origin-top-left opacity-0'
       }`}></div>
 
       {/* Background with geometric shapes */}
@@ -64,29 +66,29 @@ const CaseStudySection = () => {
               {currentStudy.tags.map((tag, index) => (
                 <span 
                   key={index}
-                  className="px-4 py-2 border border-red-500 text-red-500 text-sm font-medium rounded-full"
+                  className="px-4 py-2 border border-red-500 text-red-500 text-sm font-medium rounded-full animate-fade-in"
                 >
                   {tag}
                 </span>
               ))}
             </div>
             
-            <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold leading-tight animate-fade-in">
               {currentStudy.title}
             </h2>
             
-            <button className="bg-red-500 text-white px-8 py-4 font-semibold hover:bg-red-600 transition-all duration-300 transform hover:scale-105">
+            <button className="bg-red-500 text-white px-8 py-4 font-semibold hover:bg-red-600 transition-all duration-300 transform hover:scale-105 animate-fade-in">
               READ MORE →
             </button>
           </div>
 
           {/* Right Content - Image and Number */}
           <div className="relative">
-            <div className="absolute -top-8 -right-8 text-9xl font-bold text-red-500/20 z-0">
+            <div className="absolute -top-8 -right-8 text-9xl font-bold text-red-500/20 z-0 animate-fade-in">
               {currentStudy.number}
             </div>
             <div 
-              className="relative z-10 aspect-[4/3] rounded-lg overflow-hidden shadow-2xl transition-all duration-700 transform"
+              className="relative z-10 aspect-[4/3] rounded-lg overflow-hidden shadow-2xl transition-all duration-300 transform animate-scale-in"
               key={currentStudy.id}
             >
               <img 
@@ -104,7 +106,7 @@ const CaseStudySection = () => {
           {caseStudies.map((_, index) => (
             <div
               key={index}
-              className={`h-2 w-12 rounded-full transition-all duration-300 ${
+              className={`h-2 w-12 rounded-full transition-all duration-200 ${
                 index === currentIndex ? 'bg-red-500' : 'bg-gray-300 dark:bg-gray-700'
               }`}
             ></div>

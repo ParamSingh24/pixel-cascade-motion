@@ -23,26 +23,62 @@ const ProjectsCarousel = () => {
   const [activeProduct, setActiveProduct] = useState(0);
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
   const [showLoader, setShowLoader] = useState(false);
+  const [loaderStage, setLoaderStage] = useState(0);
   const navigate = useNavigate();
 
   const handleSeeProjects = () => {
     setShowLoader(true);
+    setLoaderStage(0);
+    
+    // Stage 1: Rectangle loader
+    setTimeout(() => setLoaderStage(1), 500);
+    
+    // Stage 2: Transform to L-shape
+    setTimeout(() => setLoaderStage(2), 1500);
+    
+    // Stage 3: Zoom in effect
+    setTimeout(() => setLoaderStage(3), 2500);
+    
+    // Navigate to projects page
     setTimeout(() => {
       navigate('/projects');
-    }, 2000);
+    }, 3500);
   };
 
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-900 relative">
-      {/* Custom Loader */}
+      {/* Enhanced Loader */}
       {showLoader && (
         <div className="fixed inset-0 z-50 bg-white dark:bg-black flex items-center justify-center">
           <div className="relative">
-            {/* First shape - vertical rectangle */}
-            <div className="w-8 h-24 bg-red-500 animate-pulse mb-4 transition-all duration-1000 transform-gpu">
+            {/* Stage 0 & 1: Rectangle loader */}
+            <div className={`transition-all duration-1000 ${
+              loaderStage >= 2 ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
+            }`}>
+              <div className={`bg-red-500 transition-all duration-1000 ${
+                loaderStage === 0 ? 'w-8 h-24' : 'w-48 h-24'
+              }`}>
+                {loaderStage === 1 && (
+                  <div className="w-full bg-red-400 h-2 animate-pulse"></div>
+                )}
+              </div>
             </div>
-            {/* Second shape - horizontal rectangle */}
-            <div className="w-24 h-8 bg-red-500 animate-pulse transition-all duration-1000 delay-500 transform-gpu scale-0 animate-[scale-in_0.5s_ease-out_0.5s_forwards]">
+            
+            {/* Stage 2: L-shape */}
+            <div className={`absolute top-0 left-0 transition-all duration-1000 ${
+              loaderStage === 2 ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
+            }`}>
+              <div className="relative">
+                <div className="w-8 h-48 bg-red-500"></div>
+                <div className="w-32 h-8 bg-red-500 mt-0"></div>
+              </div>
+            </div>
+            
+            {/* Stage 3: Zoom effect */}
+            <div className={`absolute top-0 left-0 transition-all duration-1000 ${
+              loaderStage === 3 ? 'scale-[20] opacity-100' : 'scale-100 opacity-0'
+            }`}>
+              <div className="w-16 h-16 bg-red-500 rounded-full"></div>
             </div>
           </div>
         </div>
@@ -77,7 +113,7 @@ const ProjectsCarousel = () => {
                   <img
                     src={hoveredProduct === index ? product.hoverImage : product.image}
                     alt={product.title}
-                    className={`w-full h-full object-cover transition-all duration-700 ${
+                    className={`w-full h-full object-cover transition-all duration-500 ${
                       activeProduct === index ? 'scale-110' : 'scale-100'
                     }`}
                   />

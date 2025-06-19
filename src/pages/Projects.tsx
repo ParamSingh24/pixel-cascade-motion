@@ -1,8 +1,8 @@
-
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Chatbot from "@/components/Chatbot";
 
 const projects = [
   {
@@ -49,9 +49,18 @@ const projects = [
   }
 ];
 
+const statsData = [
+  { year: 2022, carbon: 45048, energy: 123, consumption: 47790662 },
+  { year: 2021, carbon: 14111, energy: 128, consumption: 49324077 },
+  { year: 2020, carbon: 32813, energy: 135, consumption: 48784205 },
+  { year: 2019, carbon: 38673, energy: 157, consumption: 65198706 }
+];
+
 const Projects = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [visibleProjects, setVisibleProjects] = useState<number[]>([]);
+  const [scrollY, setScrollY] = useState(0);
+  const [heroImageScale, setHeroImageScale] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,6 +70,20 @@ const Projects = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const newScrollY = window.scrollY;
+      setScrollY(newScrollY);
+      
+      // Hero image scaling effect
+      const scaleValue = 1 + (newScrollY / 1000);
+      setHeroImageScale(Math.min(scaleValue, 3));
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -115,15 +138,76 @@ const Projects = () => {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-black dark:to-gray-800">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-5xl md:text-7xl font-bold mb-6">
-            Our Work
-          </h2>
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Discover the innovative projects that showcase our expertise and commitment to excellence
-          </p>
+      {/* Hero Section with scaling image */}
+      <section className="pt-32 pb-20 h-screen relative overflow-hidden">
+        <div 
+          className="absolute inset-0 transition-transform duration-300 ease-out"
+          style={{
+            transform: `scale(${heroImageScale})`,
+            backgroundImage: `url('https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
+        
+        <div className="relative z-10 container mx-auto px-6 text-center h-full flex items-center justify-center">
+          <div>
+            <h2 className="text-5xl md:text-7xl font-bold mb-6 text-white">
+              Our Work
+            </h2>
+            <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto">
+              Discover the innovative projects that showcase our expertise and commitment to excellence
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-6">
+          <h3 className="text-4xl font-bold text-center mb-16">Performance Metrics</h3>
+          
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+              <h4 className="text-2xl font-bold mb-4 text-red-500">Carbon Footprint</h4>
+              <div className="text-4xl font-bold mb-2">45,048</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">tCO₂e from 2019</div>
+              <div className="text-green-500 text-sm">↑ 16%</div>
+            </div>
+            
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+              <h4 className="text-2xl font-bold mb-4 text-red-500">Energy Intensity</h4>
+              <div className="text-4xl font-bold mb-2">123</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">kWh/m² from 2019</div>
+              <div className="text-red-500 text-sm">↓ 22%</div>
+            </div>
+            
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+              <h4 className="text-2xl font-bold mb-4 text-red-500">Energy Consumption</h4>
+              <div className="text-4xl font-bold mb-2">47.79M</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">kWh from 2019</div>
+              <div className="text-red-500 text-sm">↓ 27%</div>
+            </div>
+          </div>
+
+          {/* Chart representation */}
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+            <h4 className="text-2xl font-bold mb-8">Yearly Performance</h4>
+            <div className="grid grid-cols-4 gap-4 h-64">
+              {statsData.map((data, index) => (
+                <div key={data.year} className="flex flex-col justify-end items-center">
+                  <div 
+                    className="bg-red-500 w-16 mb-2 transition-all duration-1000 hover:bg-red-600"
+                    style={{ height: `${(data.carbon / 50000) * 200}px` }}
+                  ></div>
+                  <div className="text-sm font-medium">{data.year}</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">{data.carbon.toLocaleString()}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -186,6 +270,9 @@ const Projects = () => {
           </button>
         </div>
       </section>
+
+      {/* Chatbot */}
+      <Chatbot />
     </div>
   );
 };

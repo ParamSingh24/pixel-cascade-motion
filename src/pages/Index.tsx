@@ -7,6 +7,7 @@ import CaseStudySection from "@/components/CaseStudySection";
 import ClientShowcase from "@/components/ClientShowcase";
 import ProjectsCarousel from "@/components/ProjectsCarousel";
 import ServicesSection from "@/components/ServicesSection";
+import Chatbot from "@/components/Chatbot";
 
 const Index = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -49,6 +50,9 @@ const Index = () => {
       
       {/* Services Section */}
       <ServicesSection />
+
+      {/* Chatbot */}
+      <Chatbot />
     </div>
   );
 };
