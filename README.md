@@ -24,19 +24,7 @@ This project is a submission for the "Round 1 - Replicate & Innovate" challenge 
 - **Dark/White Theme Toggle:** Button to switch between light and dark themes for improved accessibility and user preference.
 - **Chatbot Integration:** Interactive chatbot for user engagement and support.
 
----
 
-## Tech Stack
-
-- **Frontend:** HTML, CSS, JavaScript
-- **Deployment:** Netlify/Vercel/GitHub Pages (as used for submission)
-- **AI Tools Used:** Mention any AI tools or code generation LLMs you used, e.g., "ChatGPT for code suggestions."
-
----
-
-## How to Run Locally
-
-1. **Clone the Repository:**
 
 
 ## How can I edit this code?
