@@ -4,113 +4,122 @@ import { useState, useEffect } from "react";
 const caseStudies = [
   {
     id: 1,
-    title: "INNOVATIVE TECH SOLUTIONS FOR MODERN ENTERPRISES",
-    number: "03",
-    tags: ["TECHNOLOGY", "ENTERPRISE"],
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80"
+    title: "Digital Transformation Success",
+    company: "TechCorp Industries",
+    description: "How we helped a traditional manufacturing company embrace digital innovation",
+    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80",
+    results: "300% increase in operational efficiency"
   },
   {
     id: 2,
-    title: "SUSTAINABLE ENERGY INFRASTRUCTURE PROJECT",
-    number: "02",
-    tags: ["ENERGY", "SUSTAINABILITY", "INFRASTRUCTURE"],
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80"
+    title: "Cloud Migration Excellence",
+    company: "Global Finance Ltd",
+    description: "Seamless transition to cloud infrastructure with zero downtime",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80",
+    results: "50% reduction in IT costs"
   },
   {
     id: 3,
-    title: "DIGITAL TRANSFORMATION INITIATIVE 2025",
-    number: "01",
-    tags: ["DIGITAL", "TRANSFORMATION"],
-    image: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80"
+    title: "AI Implementation Strategy",
+    company: "RetailMax Solutions",
+    description: "Revolutionary AI-powered customer experience transformation",
+    image: "https://images.unsplash.com/photo-1555255707-c07966088b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80",
+    results: "150% improvement in customer satisfaction"
   }
 ];
 
 const CaseStudySection = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentStudy, setCurrentStudy] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [redOverlay, setRedOverlay] = useState({ show: false, corner: '' });
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % caseStudies.length);
-        setIsTransitioning(false);
-      }, 200); // Faster transition
-    }, 2500); // More frequent changes
+      handleNext();
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currentStudy]);
 
-  const currentStudy = caseStudies[currentIndex];
+  const handleNext = () => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setRedOverlay({ show: true, corner: 'top-left' });
+    
+    setTimeout(() => {
+      setRedOverlay({ show: true, corner: 'full' });
+    }, 300);
+    
+    setTimeout(() => {
+      setCurrentStudy((prev) => (prev + 1) % caseStudies.length);
+    }, 600);
+    
+    setTimeout(() => {
+      setRedOverlay({ show: false, corner: '' });
+      setIsTransitioning(false);
+    }, 900);
+  };
 
   return (
-    <section className="min-h-screen bg-white dark:bg-black relative overflow-hidden">
-      {/* Fast corner-to-corner red overlay */}
-      <div className={`absolute inset-0 z-20 transition-all duration-200 ease-in-out ${
-        isTransitioning 
-          ? 'bg-red-500 transform scale-150 rotate-12' 
-          : 'bg-red-500 scale-0 origin-top-left opacity-0'
-      }`}></div>
-
-      {/* Background with geometric shapes */}
+    <section className="h-screen relative overflow-hidden bg-white dark:bg-black">
+      {/* Background Image */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-red-500 to-transparent opacity-10"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-500/5 rotate-45 transform -translate-x-48 translate-y-48"></div>
+        <img
+          src={caseStudies[currentStudy].image}
+          alt={caseStudies[currentStudy].title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-6 py-20">
-        <div className="grid lg:grid-cols-2 gap-16 items-center min-h-screen">
-          {/* Left Content */}
-          <div className="space-y-8">
-            <div className="flex space-x-4">
-              {currentStudy.tags.map((tag, index) => (
-                <span 
+      {/* Red Transition Overlay */}
+      <div className={`absolute inset-0 bg-red-600 transition-all duration-300 ${
+        redOverlay.show && redOverlay.corner === 'top-left' ? 'clip-path-triangle-tl' :
+        redOverlay.show && redOverlay.corner === 'full' ? 'clip-path-full' :
+        'clip-path-none'
+      }`} style={{
+        clipPath: redOverlay.show && redOverlay.corner === 'top-left' ? 'polygon(0 0, 50% 0, 0 50%)' :
+                 redOverlay.show && redOverlay.corner === 'full' ? 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' :
+                 'polygon(0 0, 0 0, 0 0)'
+      }} />
+
+      {/* Content */}
+      <div className="relative z-10 h-full flex items-center">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl">
+            <h2 className="text-5xl md:text-7xl font-bold mb-6 text-white animate-fade-in">
+              Case Study
+            </h2>
+            <h3 className="text-3xl md:text-5xl font-light mb-8 text-white animate-fade-in">
+              {caseStudies[currentStudy].title}
+            </h3>
+            <p className="text-xl text-white/90 mb-6 animate-fade-in">
+              {caseStudies[currentStudy].description}
+            </p>
+            <div className="flex items-center space-x-8 text-white/80 animate-fade-in">
+              <span className="text-lg">{caseStudies[currentStudy].company}</span>
+              <span>•</span>
+              <span className="text-green-400 font-semibold">{caseStudies[currentStudy].results}</span>
+            </div>
+            
+            {/* Navigation */}
+            <div className="flex items-center space-x-4 mt-8">
+              {caseStudies.map((_, index) => (
+                <button
                   key={index}
-                  className="px-4 py-2 border border-red-500 text-red-500 text-sm font-medium rounded-full animate-fade-in"
-                >
-                  {tag}
-                </span>
+                  onClick={() => {
+                    if (!isTransitioning && index !== currentStudy) {
+                      setCurrentStudy(index);
+                    }
+                  }}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentStudy ? 'bg-white' : 'bg-white/40 hover:bg-white/60'
+                  }`}
+                />
               ))}
             </div>
-            
-            <h2 className="text-4xl md:text-6xl font-bold leading-tight animate-fade-in">
-              {currentStudy.title}
-            </h2>
-            
-            <button className="bg-red-500 text-white px-8 py-4 font-semibold hover:bg-red-600 transition-all duration-300 transform hover:scale-105 animate-fade-in">
-              READ MORE →
-            </button>
           </div>
-
-          {/* Right Content - Image and Number */}
-          <div className="relative">
-            <div className="absolute -top-8 -right-8 text-9xl font-bold text-red-500/20 z-0 animate-fade-in">
-              {currentStudy.number}
-            </div>
-            <div 
-              className="relative z-10 aspect-[4/3] rounded-lg overflow-hidden shadow-2xl transition-all duration-300 transform animate-scale-in"
-              key={currentStudy.id}
-            >
-              <img 
-                src={currentStudy.image}
-                alt={currentStudy.title}
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Progress Indicators */}
-        <div className="flex justify-center space-x-4 mt-12">
-          {caseStudies.map((_, index) => (
-            <div
-              key={index}
-              className={`h-2 w-12 rounded-full transition-all duration-200 ${
-                index === currentIndex ? 'bg-red-500' : 'bg-gray-300 dark:bg-gray-700'
-              }`}
-            ></div>
-          ))}
         </div>
       </div>
     </section>

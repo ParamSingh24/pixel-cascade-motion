@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Moon, Sun, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Chatbot from "@/components/Chatbot";
+import AdvancedLoader from "@/components/AdvancedLoader";
 
 const projects = [
   {
@@ -61,6 +62,7 @@ const Projects = () => {
   const [visibleProjects, setVisibleProjects] = useState<number[]>([]);
   const [scrollY, setScrollY] = useState(0);
   const [heroImageScale, setHeroImageScale] = useState(1);
+  const [showLoader, setShowLoader] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -77,7 +79,7 @@ const Projects = () => {
       setScrollY(newScrollY);
       
       // Hero image scaling effect
-      const scaleValue = 1 + (newScrollY / 1000);
+      const scaleValue = 1 + (newScrollY / 2000);
       setHeroImageScale(Math.min(scaleValue, 3));
     };
 
@@ -107,9 +109,17 @@ const Projects = () => {
     return () => observer.disconnect();
   }, []);
 
+  const handleLoaderComplete = () => {
+    setShowLoader(false);
+  };
+
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
+
+  if (showLoader) {
+    return <AdvancedLoader onComplete={handleLoaderComplete} />;
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white transition-colors duration-300">
@@ -138,12 +148,12 @@ const Projects = () => {
         </div>
       </div>
 
-      {/* Hero Section with scaling image */}
+      {/* Hero Section with scaling image and scroll effect */}
       <section className="pt-32 pb-20 h-screen relative overflow-hidden">
         <div 
-          className="absolute inset-0 transition-transform duration-300 ease-out"
+          className="absolute inset-0 transition-all duration-300 ease-out"
           style={{
-            transform: `scale(${heroImageScale})`,
+            transform: `scale(${1 + scrollY / 2000})`,
             backgroundImage: `url('https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2048&q=80')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center'

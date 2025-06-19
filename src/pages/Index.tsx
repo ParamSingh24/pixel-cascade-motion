@@ -1,13 +1,14 @@
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
+import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import CaseStudySection from "@/components/CaseStudySection";
 import ClientShowcase from "@/components/ClientShowcase";
 import ProjectsCarousel from "@/components/ProjectsCarousel";
 import ServicesSection from "@/components/ServicesSection";
+import InteractiveSection from "@/components/InteractiveSection";
 import Chatbot from "@/components/Chatbot";
+import ContactSection from "@/components/ContactSection";
 
 const Index = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -26,16 +27,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white transition-colors duration-300">
-      {/* Dark/Light Mode Toggle */}
-      <Button
-        onClick={toggleDarkMode}
-        variant="outline"
-        size="icon"
-        className="fixed top-6 right-6 z-50 bg-white dark:bg-black border-gray-300 dark:border-gray-700"
-      >
-        {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      </Button>
-
+      <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+      
       {/* Hero Section */}
       <HeroSection />
       
@@ -43,13 +36,25 @@ const Index = () => {
       <CaseStudySection />
       
       {/* Client Showcase */}
-      <ClientShowcase />
+      <div id="customers">
+        <ClientShowcase />
+      </div>
       
       {/* Projects Carousel */}
       <ProjectsCarousel />
       
       {/* Services Section */}
-      <ServicesSection />
+      <div id="services">
+        <ServicesSection />
+      </div>
+
+      {/* Interactive Dashboard Section */}
+      <InteractiveSection />
+
+      {/* Contact Section */}
+      <div id="contact">
+        <ContactSection />
+      </div>
 
       {/* Chatbot */}
       <Chatbot />
