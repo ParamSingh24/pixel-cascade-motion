@@ -4,6 +4,41 @@
 
 **URL**: https://lovable.dev/projects/e1ee8844-7170-4030-b408-dc3ed02c7f38
 
+# Frontend Battle 2.0 – IIT Bhubaneswar Coding Competition
+
+## Project Overview
+
+This project is a submission for the "Round 1 - Replicate & Innovate" challenge of the Frontend Battle 2.0 organized by IIT Bhubaneswar. The goal was to create a responsive web page that not only replicates the given design but also incorporates innovative features and enhancements for an improved user experience.
+
+---
+
+## Features Implemented
+
+- **Parallax Animation on Homepage:** Engaging parallax scrolling effect for a dynamic user experience.
+- **Showcase Animation Work on Second Page:** Interactive animations to highlight project work.
+- **Carousel Switch on Projects Page:** Smooth carousel navigation for viewing multiple projects.
+- **Loader Implementation:** Click on "Show Our Projects" to trigger the loader before transitioning to the projects display.
+- **Graphs and Stats Page:** Dedicated section displaying data visualizations and statistics.
+- **Customer Section:** Client testimonials or featured customers section.
+- **Features and Services Section:** Detailed overview of features and services offered.
+- **Dark/White Theme Toggle:** Button to switch between light and dark themes for improved accessibility and user preference.
+- **Chatbot Integration:** Interactive chatbot for user engagement and support.
+
+---
+
+## Tech Stack
+
+- **Frontend:** HTML, CSS, JavaScript
+- **Deployment:** Netlify/Vercel/GitHub Pages (as used for submission)
+- **AI Tools Used:** Mention any AI tools or code generation LLMs you used, e.g., "ChatGPT for code suggestions."
+
+---
+
+## How to Run Locally
+
+1. **Clone the Repository:**
+
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
